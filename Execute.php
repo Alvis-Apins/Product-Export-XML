@@ -1,15 +1,15 @@
 <?php
 
-use App\HelperFunctions;
-use App\MysqlSelect;
-use App\MysqlSetup;
+use App\helperFunctions;
+use App\mysqlSelect;
+use App\mysqlSetup;
 
 require 'vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$setup = new MysqlSetup();
+$setup = new mysqlSetup();
 $connection = $setup->mysqlConnect($_ENV['DB_SERVER'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
 
 if (!mysqli_select_db($connection, $_ENV['DB_NAME'])) {
@@ -22,17 +22,17 @@ if (!mysqli_query($connection, "SELECT 1 FROM Products.product")){
     $setup->seedDatabase($lines, $connection);
 }
 
-$selection = new MysqlSelect();
+$selection = new mysqlSelect();
 $data = $selection->getSelection($connection);
 $connection->close();
 
-$filePath = 'products.xml';
+$file_path = 'products.xml';
 $dom = new DOMDocument('1.0', 'utf-8');
 $root = $dom->createElement('root');
 
 for ($i = 0; $i < count($data); $i += 3) {
-    $names = HelperFunctions::sortLanguageContent($data[$i][7], $data[$i][10], $data[$i+1][7], $data[$i+1][10], $data[$i+2][7], $data[$i+2][10]);
-    $descriptions = HelperFunctions::sortLanguageContent($data[$i][8], $data[$i][10], $data[$i+1][8], $data[$i+1][10], $data[$i+2][8], $data[$i+2][10]);
+    $names = helperFunctions::sortLanguageContent($data[$i][7], $data[$i][10], $data[$i+1][7], $data[$i+1][10], $data[$i+2][7], $data[$i+2][10]);
+    $descriptions = helperFunctions::sortLanguageContent($data[$i][8], $data[$i][10], $data[$i+1][8], $data[$i+1][10], $data[$i+2][8], $data[$i+2][10]);
 
     $item = $dom->createElement('item');
 
@@ -43,11 +43,11 @@ for ($i = 0; $i < count($data); $i += 3) {
     $item->appendChild($status);
 
     $name = $dom->createElement('name');
-    HelperFunctions::setLanguageContent($dom, $names, $name);
+    helperFunctions::setLanguageContent($dom, $names, $name);
     $item->appendChild($name);
 
     $description = $dom->createElement('description');
-    HelperFunctions::setLanguageContent($dom, $descriptions, $description);
+    helperFunctions::setLanguageContent($dom, $descriptions, $description);
     $item->appendChild($description);
 
     $quantity = $dom->createElement('quantity', $data[$i][2]);
@@ -66,7 +66,7 @@ for ($i = 0; $i < count($data); $i += 3) {
     $price = $dom->createElement('price', number_format($regular_price, 2,'.', ' '));
     $item->appendChild($price);
 
-    $discount_price = HelperFunctions::checkSpecials($data[$i][11], $data[$i][12], $data[$i][13]);
+    $discount_price = helperFunctions::checkSpecials($data[$i][11], $data[$i][12], $data[$i][13]);
     $special_price = $dom->createElement('special_price', number_format($discount_price, 2, '.',' '));
     $item->appendChild($special_price);
 
@@ -75,9 +75,9 @@ for ($i = 0; $i < count($data); $i += 3) {
 
 $dom->appendChild($root);
 $dom->formatOutput = true;
-$dom->save($filePath);
+$dom->save($file_path);
 
-if ($dom->save($filePath)){
+if ($dom->save($file_path)){
     echo "XML file - products.xml created successfully" . PHP_EOL;
 }else {
     echo "XML file - products.xml was not created" . PHP_EOL;

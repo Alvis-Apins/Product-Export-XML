@@ -2,9 +2,11 @@
 
 namespace App;
 
-class MysqlSetup
+use mysqli;
+
+class mysqlSetup
 {
-    public function mysqlConnect(string $servername, string $username, string $password): \mysqli
+    public function mysqlConnect(string $servername, string $username, string $password): mysqli
     {
         $conn = mysqli_connect($servername, $username, $password);
         if (!$conn) die("Connection failed: " . mysqli_connect_error());
@@ -12,7 +14,7 @@ class MysqlSetup
         return $conn;
     }
 
-    public function createDatabase(\mysqli $connection, string $dbName)
+    public function createDatabase(mysqli $connection, string $dbName):void
     {
         $sql = "CREATE DATABASE $dbName";
         if ($connection->query($sql) !== TRUE) die("Error creating database: " . $connection->error);
@@ -20,14 +22,14 @@ class MysqlSetup
         echo "Database created successfully" . PHP_EOL;
     }
 
-    public function seedDatabase($lines, \mysqli $connection)
+    public function seedDatabase($lines, mysqli $connection):void
     {
-        $tempLine = '';
+        $temp_line = '';
         foreach ($lines as $line) {
-            $tempLine .= $line;
+            $temp_line .= $line;
             if (substr(trim($line), -1, 1) == ';') {
-                mysqli_query($connection, $tempLine) or print("Error in " . $tempLine . ":" . mysqli_error());
-                $tempLine = '';
+                mysqli_query($connection, $temp_line) or print("Error in " . $temp_line . ":" . mysqli_error($connection));
+                $temp_line = '';
             }
         }
 

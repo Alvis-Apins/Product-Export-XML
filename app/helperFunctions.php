@@ -7,7 +7,7 @@ use DOMDocument;
 use DOMException;
 use Exception;
 
-class HelperFunctions
+class helperFunctions
 {
     public static function sortLanguageContent(string $content_1, string $language_id_1, string $content_2, string $language_id_2, string $content_3, string $language_id_3): array
     {

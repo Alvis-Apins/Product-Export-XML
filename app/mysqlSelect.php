@@ -2,9 +2,9 @@
 
 namespace App;
 
-class MysqlSelect
+class mysqlSelect
 {
-    public function getSelection($connection)
+    public function getSelection($connection):array
     {
         $query = "SELECT 
             product.model, product.status, product.quantity, product.ean, product.image, product.date_added, product.price,
