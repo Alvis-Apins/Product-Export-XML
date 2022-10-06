@@ -11,6 +11,7 @@ Required Tools:
 <li>PHP - 7.4</li>
 <li>MySql - 5.7.39</li>
 <li>Composer</li>
+<li>Git</li>
 </ul>
 
 ---
@@ -18,7 +19,8 @@ Required Tools:
 <p>
 Setup:
 </p>
-after cloning project locally
+Clone repository localy
+<pre>git clone https://github.com/Alvis-Apins/Product-Export-XML.git</pre>
 <ul>
 <li>create .env file and copy contents from .env.example</li>
 <li>in .env file configure connection to MySql database</li>
